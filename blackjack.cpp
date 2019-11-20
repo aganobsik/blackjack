@@ -28,8 +28,19 @@ int getValue(int card){
 int getSum(vector<int> hand){
   //Factor in 1
   int sum = 0;
+  int aceCount = 0;
   for (const auto &card : hand){
+        if (card == 11) {
+        ++aceCount;
+        }
     sum += card;
+  }
+  if (aceCount >1) {
+  sum = sum - (10 *(aceCount-1));
+
+  }
+  if (sum > 21 && aceCount > 0) {
+  sum = sum - 10;
   }
   return sum;
 }
@@ -81,11 +92,11 @@ int main(){
   vector<int> cards; // Total deck
   vector<int> playerHand; // Exact cards in player hand
   vector<int> dealerHand;  // Exact cards in dealer hand
-  
+
   // Deals with ace value
   vector<int> playerValues;  // Values of cards in player hand
   vector<int> dealerValues;  // Values of cards in dealer hand
-  
+
   int playerSum;  // Total sum of player hand
   int dealerSum;  // Total sum of dealer hand
   vector<string> playerSuit;  // Suit of cards in player hand
@@ -121,7 +132,7 @@ int main(){
   }
   cout << endl;
 */
-  
+
   //Determine Suits
   for (const auto &card : playerHand){
     playerSuit.push_back(getSuit(card));
@@ -159,22 +170,22 @@ int main(){
   dealerSum = getSum(dealerValues);
 
   // Begin Game
-  
+
   //Disp Dealer Card
   cout << "The Dealer Has Been Dealt: " << endl;
   //cout << getValue(dealerHand[1]) << endl;
   printCard(dealerHand[1]);
   cout << endl << endl;
-  
+
   //Disp Player Cards
   cout << "Your Cards are:" << endl;
   //cout << getValue(playerHand[0]) << " " << getValue(playerHand[1]) << endl;
-  printCard(playerHand[0]); 
+  printCard(playerHand[0]);
   cout << endl;
   printCard(playerHand[1]);
   cout << endl;
   cout << playerSum << endl;
-  
+
   cout << endl;
   for (const auto &val : playerValues){
     cout << val << endl;
