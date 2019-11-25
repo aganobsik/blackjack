@@ -290,8 +290,6 @@ int game(double& wallet){
   playerHand.push_back(cards[currentCard++]);
   dealerHand.push_back(cards[currentCard++]);
   
-  playerHand.push_back(0);
-  playerHand.push_back(0);
   
   // Determine Suits
   for (const auto &card : playerHand){
@@ -698,24 +696,31 @@ int game(double& wallet){
 
 else if (playerSumSplit >= 2){
 	//Print Results for split
+	wallet = wallet - bet;
 	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 if (playerBust){
-    cout << "Player Busted Hand 1, Dealer Wins Half of Bet" << endl; // Bet already removed
+    cout << "Player Busted Hand 1, Dealer Wins Against Hand 1" << endl; // Bet already removed
   }
 if (playerBustSplit){
-cout << "Player Split Busted, Dealer Wins Half of Bet" << endl; // Bet already removed
+cout << "Player Split Busted, Dealer Wins Against Hand 2" << endl; // Bet already removed
 }
 if (dealerBust){
 	if (!playerBust && !playerBustSplit){
 	cout << "Dealer Busted, Player Wins" << endl;
-		if (blackJack){
-			wallet += bet + .75 * bet; // Payout is 1.5x
+		if (blackJack && blackJackSplit){
+			cout << "Both Hands have Blackjack!" << endl;
+			wallet +=  5 * bet; // Payout is 1.5x
 		}
-		if (blackJackSplit){
-			wallet += bet + 0.75*bet;
+		else if (blackJackSplit){
+			cout << "Second Hand Has Blackjack" << endl;
+			wallet += bet + 1.5*bet;
 		}
-		if (!blackJack && !blackJackSplit){
-			wallet += 2 * bet; // Return bet
+		else if (blackJack){
+			cout << "First Hand Has Blackjack" << endl;
+			wallet +=bet + 1.5*bet;
+		}
+		else if (!blackJack && !blackJackSplit){
+		cout << endl;
 		}
 	}
 	else if (playerBust && playerBustSplit){
@@ -724,12 +729,19 @@ if (dealerBust){
 		cout << "Dealer Busted, ";
 		if (playerBust){
 			cout << "Player Split wins";
+			wallet += bet + bet;
 		}
 		if (playerBustSplit){
 			cout << "Player Hand 1 wins";
+			wallet += bet+bet;
 		}
-		
 	}
+		
+	if (!playerBust && !playerBustSplit){
+	cout << "Both Hands Have Won!" << endl;
+	wallet += 4*bet;	
+	}
+	
 }
 if (dealerSum > playerSum && !dealerBust){
     cout << "Dealer Wins against Hand 1: " << dealerSum << " > " << playerSum << endl; // Bet already removed
@@ -737,10 +749,10 @@ if (dealerSum > playerSum && !dealerBust){
 else if (playerSum > dealerSum && !playerBust){
 cout << "Player Wins with Hand 1: " << playerSum << " > " << dealerSum << endl;
     if (blackJack){
-      wallet += bet + .75 * bet; // Payout is 1.5x
+      wallet += bet + 1.5 * bet; // Payout is 1.5x
     }
     else{
-      wallet += bet; // Return bet
+      wallet += bet+bet; // Return bet
 }
 }
 
@@ -750,10 +762,10 @@ if (dealerSum > playerSumSplit && !dealerBust){
 else if (playerSumSplit > dealerSum && !playerBustSplit){
 cout << "Player Wins with Hand 2: " << playerSumSplit << " > " << dealerSum << endl;
     if (blackJackSplit){
-      wallet += bet + .75 * bet; // Payout is 1.5x
+      wallet += bet + 1.5 * bet; // Payout is 1.5x
     }
     else{
-      wallet += bet; // Return bet
+      wallet += bet+bet; // Return bet
 }
 }
   if (playerSum == dealerSum && !dealerBust) { // Tie
